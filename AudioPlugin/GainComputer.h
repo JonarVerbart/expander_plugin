@@ -14,6 +14,8 @@ GainComputer();
 ~GainComputer();
 void setThreshold(double newThreshold);
 void setRatio(double newRatio);
+void setAttackTime(double attackTime, double sampleRate);
+void setReleaseTime(double releaseTime, double sampleRate);
 void calcEnvelope(float inputValue);
 double getOutputLevel();
 double getGain(float inputValue);

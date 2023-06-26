@@ -27,9 +27,9 @@ double EnvelopeDetector::getEnvelope(float inputValue){
     return 20.0* log10(currEnvelope);
 }
 
-void EnvelopeDetector::setRCAttackTime(double attack_ms) {
+void EnvelopeDetector::setRCAttackTime(double attack_ms, double sampleRate) {
     rcAttackTime = exp(TLD_AUDIO_ENVELOPE_ANALOG_TC / (attack_ms * sampleRate * 0.001));
 }
-void EnvelopeDetector::setRCReleaseTime(double release_ms) {
+void EnvelopeDetector::setRCReleaseTime(double release_ms, double sampleRate) {
     rcReleaseTime = exp(TLD_AUDIO_ENVELOPE_ANALOG_TC / (release_ms * sampleRate * 0.001));
 }

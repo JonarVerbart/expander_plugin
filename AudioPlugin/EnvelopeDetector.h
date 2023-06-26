@@ -13,9 +13,8 @@ public:
     ~EnvelopeDetector();
 
     double getEnvelope(float inputValue);
-    void setRCAttackTime(double attack_ms);
-    void setRCReleaseTime(double release_ms);
-    double rmsLog();
+    void setRCAttackTime(double attack_ms, double sampleRate);
+    void setRCReleaseTime(double release_ms, double sampleRate);
 
 private:
     //double currEnvelope;

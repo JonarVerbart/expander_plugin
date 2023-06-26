@@ -27,6 +27,14 @@ void GainComputer::setRatio(double newRatio){
     }
 }
 
+void GainComputer::setAttackTime(double attackTime, double sampleRate){
+    envDetector->setRCAttackTime(attackTime, sampleRate);
+}
+
+void GainComputer::setReleaseTime(double releaseTime, double sampleRate){
+    envDetector->setRCReleaseTime(releaseTime, sampleRate);
+}
+
 void GainComputer::calcEnvelope(float inputValue) {
     detectorOutput = envDetector->getEnvelope(inputValue);
 }

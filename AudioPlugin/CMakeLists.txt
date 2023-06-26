@@ -70,7 +70,9 @@ juce_add_plugin(ExpanderPlugin
 target_sources(ExpanderPlugin
     PRIVATE
         PluginEditor.cpp
-        PluginProcessor.cpp)
+        PluginProcessor.cpp
+        GainComputer.cpp
+        EnvelopeDetector.cpp)
 
 # `target_compile_definitions` adds some preprocessor definitions to our target. In a Projucer
 # project, these might be passed in the 'Preprocessor Definitions' field. JUCE modules also make use

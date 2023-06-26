@@ -20,6 +20,16 @@ private:
     AudioPluginAudioProcessor& processorRef;
 
     juce::Slider gainSlider;
+    juce::Slider thresholdSlider;
+    juce::Slider attackSlider;
+    juce::Slider releaseSlider;
+    juce::Slider ratioSlider;
+
+    juce::Label gainLabel;
+    juce::Label thresholdLabel;
+    juce::Label attackLabel;
+    juce::Label releaseLabel;
+    juce::Label ratioLabel;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioPluginAudioProcessorEditor)
 };
