@@ -152,6 +152,11 @@ void AudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
         juce::ignoreUnused (channelData);
         // ...do something to the data...
         for (int sample = 0; sample < buffer.getNumSamples(); ++sample) {
+            /*
+            double currGain = expander->getGain(buffer.getSample(channel, sample));
+            std::cout<<currGain;
+            std::cout<<"\n";
+             */
             channelData[sample] = buffer.getSample(channel, sample) * expander->getGain(buffer.getSample(channel, sample)) * gainValue;
         }
     }

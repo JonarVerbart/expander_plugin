@@ -5,6 +5,7 @@
 #ifndef EXPANDER_PLUGIN_ENVELOPEDETECTOR_H
 #define EXPANDER_PLUGIN_ENVELOPEDETECTOR_H
 #include "math.h"
+#include "iostream"
 
 
 class EnvelopeDetector {

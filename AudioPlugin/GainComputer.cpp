@@ -41,8 +41,12 @@ void GainComputer::calcEnvelope(float inputValue) {
 
 double GainComputer::getOutputLevel(){
     if (detectorOutput<= threshold){
+        // std::cout << detectorOutput;
+        // std::cout << "\n";
         return detectorOutput;
     } else {
+        // std::cout << threshold + ((detectorOutput - threshold)/ratio);
+        // std::cout << "\n";
         return threshold + ((detectorOutput - threshold)/ratio);
     }
 }

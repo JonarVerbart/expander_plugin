@@ -18,6 +18,9 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor (AudioPluginAud
     gainSlider.addListener(this);
     addAndMakeVisible(gainSlider);
 
+    processorRef.expander->setReleaseTime(100.0, processorRef.getSampleRate());
+    processorRef.expander->setAttackTime(100.0, processorRef.getSampleRate());
+/*
     thresholdSlider.setSliderStyle(juce::Slider::RotaryVerticalDrag);
     thresholdSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 100, 25);
     thresholdSlider.setRange(-96.0, 0.0);
@@ -66,7 +69,7 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor (AudioPluginAud
     releaseLabel.setText ("Release", juce::dontSendNotification);
     releaseLabel.attachToComponent (&releaseSlider, false);
     addAndMakeVisible (releaseLabel);
-
+*/
 }
 
 AudioPluginAudioProcessorEditor::~AudioPluginAudioProcessorEditor()
@@ -93,11 +96,12 @@ void AudioPluginAudioProcessorEditor::resized()
     // This is generally where you'll want to lay out the positions of any
     // subcomponents in your editor..
     gainSlider.setBoundsRelative(0.5f,0.5f,0.3f,0.3f);
+    /*
     thresholdSlider.setBoundsRelative(0.1f,0.5f,0.3f,0.3f);
     ratioSlider.setBoundsRelative(0.2f,0.5f,0.3f,0.3f);
     releaseSlider.setBoundsRelative(0.3f,0.5f,0.3f,0.3f);
     attackSlider.setBoundsRelative(0.4f,0.5f,0.3f,0.3f);
-
+*/
     //gainLabel.setBoundsRelative(0.2f,0.2f,0.3f,0.3f);
     //gainLabel.attachToComponent (&gainSlider, false);
 }
@@ -106,6 +110,7 @@ void AudioPluginAudioProcessorEditor::sliderValueChanged(juce::Slider *slider) {
     if (slider == &gainSlider) {
         processorRef.gainValue = pow(10, gainSlider.getValue() / 20);
     }
+    /*
     if (slider == &thresholdSlider) {
         processorRef.expander->setThreshold(thresholdSlider.getValue());
     }
@@ -118,4 +123,5 @@ void AudioPluginAudioProcessorEditor::sliderValueChanged(juce::Slider *slider) {
     if (slider == &releaseSlider) {
         processorRef.expander->setReleaseTime(releaseSlider.getValue(), processorRef.getSampleRate());
     }
+     */
 }
