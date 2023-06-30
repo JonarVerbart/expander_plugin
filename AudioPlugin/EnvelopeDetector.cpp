@@ -29,8 +29,8 @@ double EnvelopeDetector::getEnvelope(float inputValue){
     lastEnvelope = currEnvelope;
 
     currEnvelope = pow(currEnvelope, 0.5);
-    std::cout << currEnvelope;
-    std::cout << "\n";
+    // std::cout << currEnvelope;
+    // std::cout << "\n";
     if(currEnvelope<=0){
         return -96.0;
     }

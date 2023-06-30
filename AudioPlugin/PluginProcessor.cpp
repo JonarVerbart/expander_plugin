@@ -10,9 +10,16 @@ AudioPluginAudioProcessor::AudioPluginAudioProcessor()
                       #endif
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                      #endif
-                       )
+                       ), apvts (*this, nullptr, "Parameters", createParameters())
 {
     expander = new GainComputer;
+/*
+    addParameter (gain = new juce::AudioParameterFloat ("gain", // parameterID
+                                                        "Gain", // parameter name
+                                                        0.0f,   // minimum value
+                                                        1.0f,   // maximum value
+                                                        0.5f)); // default value
+                                                        */
 }
 
 AudioPluginAudioProcessor::~AudioPluginAudioProcessor()
@@ -157,7 +164,9 @@ void AudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
             std::cout<<currGain;
             std::cout<<"\n";
              */
-            channelData[sample] = buffer.getSample(channel, sample) * expander->getGain(buffer.getSample(channel, sample)) * gainValue;
+            std::cout<<*apvts.getRawParameterValue("gain");
+            std::cout<<"\n";
+            channelData[sample] = buffer.getSample(channel, sample) * expander->getGain(buffer.getSample(channel, sample)) * *apvts.getRawParameterValue("gain");
         }
     }
 }
@@ -172,6 +181,7 @@ juce::AudioProcessorEditor* AudioPluginAudioProcessor::createEditor()
 {
     return new AudioPluginAudioProcessorEditor (*this);
 }
+
 
 //==============================================================================
 void AudioPluginAudioProcessor::getStateInformation (juce::MemoryBlock& destData)
@@ -194,4 +204,11 @@ void AudioPluginAudioProcessor::setStateInformation (const void* data, int sizeI
 juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
     return new AudioPluginAudioProcessor();
+}
+
+juce::AudioProcessorValueTreeState::ParameterLayout AudioPluginAudioProcessor::createParameters(){
+    std::vector<std::unique_ptr<juce::RangedAudioParameter>> parameters;
+    parameters.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{"gain",1},
+            "Gain", 0.1f, 1.0f, 1.0f));
+    return {parameters.begin(), parameters.end()};
 }

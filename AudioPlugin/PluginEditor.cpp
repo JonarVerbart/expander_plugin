@@ -11,11 +11,15 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor (AudioPluginAud
     setSize (400, 200);
     setResizable(true,true);
 
+    //using SliderAttachment = juce::AudioProcessorValueTreeState::SliderAttachment;
+
+    gainAttachment = std::make_unique<SliderAttachment>(processorRef.apvts, "gain", gainSlider);
+
     gainSlider.setSliderStyle(juce::Slider::RotaryVerticalDrag);
     gainSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 100, 25);
-    gainSlider.setRange(-48.0, 0.0);
-    gainSlider.setValue(-1.0);
-    gainSlider.addListener(this);
+    //gainSlider.setRange(-48.0, 0.0);
+    //gainSlider.setValue(-1.0);
+    //gainSlider.addListener(this);
     addAndMakeVisible(gainSlider);
 
     processorRef.expander->setReleaseTime(100.0, processorRef.getSampleRate());
@@ -105,12 +109,13 @@ void AudioPluginAudioProcessorEditor::resized()
     //gainLabel.setBoundsRelative(0.2f,0.2f,0.3f,0.3f);
     //gainLabel.attachToComponent (&gainSlider, false);
 }
-
+/*
 void AudioPluginAudioProcessorEditor::sliderValueChanged(juce::Slider *slider) {
     if (slider == &gainSlider) {
-        processorRef.gainValue = pow(10, gainSlider.getValue() / 20);
+        //processorRef.gainValue = pow(10, gainSlider.getValue() / 20);
+        processorRef.gainValue = *processorRef.apvts.getRawParameterValue("Gain");
     }
-    /*
+
     if (slider == &thresholdSlider) {
         processorRef.expander->setThreshold(thresholdSlider.getValue());
     }
@@ -123,5 +128,5 @@ void AudioPluginAudioProcessorEditor::sliderValueChanged(juce::Slider *slider) {
     if (slider == &releaseSlider) {
         processorRef.expander->setReleaseTime(releaseSlider.getValue(), processorRef.getSampleRate());
     }
-     */
 }
+ */
