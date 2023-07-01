@@ -16,6 +16,9 @@ void GainComputer::setThreshold(double newThreshold){
         return;
     } else {
         threshold = newThreshold;
+        std::cout<<"Threshold: ";
+        std::cout<<threshold;
+        std::cout<<"\n";
     }
 }
 
@@ -24,15 +27,34 @@ void GainComputer::setRatio(double newRatio){
         return;
     } else {
         ratio = newRatio;
+        std::cout<<"Ratio: ";
+        std::cout<<ratio;
+        std::cout<<"\n";
     }
 }
 
-void GainComputer::setAttackTime(double attackTime, double sampleRate){
-    envDetector->setRCAttackTime(attackTime, sampleRate);
+void GainComputer::setAttackTime(double attackTime, double sampleRate) {
+    if (attackTime == lastAttackTime) {
+        return;
+    } else {
+        envDetector->setRCAttackTime(attackTime, sampleRate);
+        lastAttackTime = attackTime;
+        std::cout<<"AttackTime: ";
+        std::cout << attackTime;
+        std::cout << "\n";
+    }
 }
 
-void GainComputer::setReleaseTime(double releaseTime, double sampleRate){
-    envDetector->setRCReleaseTime(releaseTime, sampleRate);
+void GainComputer::setReleaseTime(double releaseTime, double sampleRate) {
+    if (releaseTime == lastReleaseTime) {
+        return;
+    } else {
+        envDetector->setRCReleaseTime(releaseTime, sampleRate);
+        lastReleaseTime = releaseTime;
+        std::cout<<"ReleaseTime: ";
+        std::cout << releaseTime;
+        std::cout << "\n";
+    }
 }
 
 void GainComputer::calcEnvelope(float inputValue) {

@@ -20,8 +20,6 @@ private:
     AudioPluginAudioProcessor& processorRef;
 
     juce::Slider gainSlider;
-
-   /*
     juce::Slider thresholdSlider;
     juce::Slider attackSlider;
     juce::Slider releaseSlider;
@@ -32,12 +30,16 @@ private:
     juce::Label attackLabel;
     juce::Label releaseLabel;
     juce::Label ratioLabel;
-    */
     juce::Label gainLabel;
 
     using SliderAttachment = juce::AudioProcessorValueTreeState::SliderAttachment;
 
     std::unique_ptr<SliderAttachment> gainAttachment;
+    std::unique_ptr<SliderAttachment> thresholdAttachment;
+    std::unique_ptr<SliderAttachment> ratioAttachment;
+    std::unique_ptr<SliderAttachment> attackAttachment;
+    std::unique_ptr<SliderAttachment> releaseAttachment;
+
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioPluginAudioProcessorEditor)
 };

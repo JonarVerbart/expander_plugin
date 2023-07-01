@@ -49,6 +49,10 @@ public:
 
 private:
     // juce::AudioParameterFloat* gain;
+    float dBToLin(float valueIndB);
+    float usrGainLin;
+    float usrGaindB;
+    float lastUsrGaindB;
 
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioPluginAudioProcessor)

@@ -25,6 +25,8 @@ private:
     double detectorOutput;
     double gaindB;
     double linearGain;
+    double lastAttackTime;
+    double lastReleaseTime;
     EnvelopeDetector* envDetector;
 };
 

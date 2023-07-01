@@ -13,6 +13,10 @@ AudioPluginAudioProcessor::AudioPluginAudioProcessor()
                        ), apvts (*this, nullptr, "Parameters", createParameters())
 {
     expander = new GainComputer;
+    usrGaindB = *apvts.getRawParameterValue("gain");
+    usrGainLin = dBToLin(usrGaindB);
+    expander->setReleaseTime(100.0, getSampleRate());
+    expander->setAttackTime(100.0, getSampleRate());
 /*
     addParameter (gain = new juce::AudioParameterFloat ("gain", // parameterID
                                                         "Gain", // parameter name
@@ -138,6 +142,22 @@ void AudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
     auto totalNumInputChannels  = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
 
+    usrGaindB = *apvts.getRawParameterValue("gain");
+    if (usrGaindB != lastUsrGaindB) {
+        usrGainLin = dBToLin(usrGaindB);
+        lastUsrGaindB = usrGaindB;
+        std::cout<<"usrGainLin: ";
+        std::cout<<usrGainLin;
+        std::cout<<"\n";
+    }
+    expander->setThreshold(*apvts.getRawParameterValue("threshold"));
+    expander->setRatio(*apvts.getRawParameterValue("ratio"));
+    expander->setAttackTime(*apvts.getRawParameterValue("attack"), getSampleRate());
+    expander->setReleaseTime(*apvts.getRawParameterValue("release"), getSampleRate());
+
+
+    //float usrGain = *apvts.getRawParameterValue("gain");
+
     // In case we have more outputs than inputs, this code clears any output
     // channels that didn't contain input data, (because these aren't
     // guaranteed to be empty - they may contain garbage).
@@ -163,10 +183,13 @@ void AudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
             double currGain = expander->getGain(buffer.getSample(channel, sample));
             std::cout<<currGain;
             std::cout<<"\n";
-             */
+
             std::cout<<*apvts.getRawParameterValue("gain");
             std::cout<<"\n";
-            channelData[sample] = buffer.getSample(channel, sample) * expander->getGain(buffer.getSample(channel, sample)) * *apvts.getRawParameterValue("gain");
+
+             */
+            channelData[sample] = buffer.getSample(channel, sample) *
+                    expander->getGain(buffer.getSample(channel, sample)) * usrGainLin;
         }
     }
 }
@@ -189,6 +212,11 @@ void AudioPluginAudioProcessor::getStateInformation (juce::MemoryBlock& destData
     // You should use this method to store your parameters in the memory block.
     // You could do that either as raw data, or use the XML or ValueTree classes
     // as intermediaries to make it easy to save and load complex data.
+
+    auto state = apvts.copyState();
+    std::unique_ptr<juce::XmlElement> xml (state.createXml());
+    copyXmlToBinary (*xml, destData);
+
     juce::ignoreUnused (destData);
 }
 
@@ -196,6 +224,13 @@ void AudioPluginAudioProcessor::setStateInformation (const void* data, int sizeI
 {
     // You should use this method to restore your parameters from this memory block,
     // whose contents will have been created by the getStateInformation() call.
+
+    std::unique_ptr<juce::XmlElement> xmlState (AudioPluginAudioProcessor::getXmlFromBinary (data, sizeInBytes));
+
+    if (xmlState.get() != nullptr)
+        if (xmlState->hasTagName (apvts.state.getType()))
+            apvts.replaceState (juce::ValueTree::fromXml (*xmlState));
+
     juce::ignoreUnused (data, sizeInBytes);
 }
 
@@ -208,7 +243,39 @@ juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 
 juce::AudioProcessorValueTreeState::ParameterLayout AudioPluginAudioProcessor::createParameters(){
     std::vector<std::unique_ptr<juce::RangedAudioParameter>> parameters;
-    parameters.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{"gain",1},
-            "Gain", 0.1f, 1.0f, 1.0f));
+    parameters.push_back(std::make_unique<juce::AudioParameterFloat>
+        (juce::ParameterID{"gain",5},"Gain", -96.0f, 0.0f, 0.0f));
+    parameters.push_back(std::make_unique<juce::AudioParameterFloat>
+        (juce::ParameterID{"threshold",1},"Threshold", -96.0f, 0.0f, 0.0f));
+    parameters.push_back(std::make_unique<juce::AudioParameterFloat>
+        (juce::ParameterID{"ratio",2},"Ratio", 1.0f, 10.0f, 1.0f));
+    parameters.push_back(std::make_unique<juce::AudioParameterFloat>
+        (juce::ParameterID{"attack",3},"Attack", 0.1f, 500.0f, 100.0f));
+    parameters.push_back(std::make_unique<juce::AudioParameterFloat>
+        (juce::ParameterID{"release",4},"Release", 0.1f, 500.0f, 100.0f));
     return {parameters.begin(), parameters.end()};
 }
+
+float AudioPluginAudioProcessor::dBToLin(float valueIndB) {
+    return pow(10.0f, valueIndB / 20);
+}
+
+/*
+
+void getStateInformation (juce::MemoryBlock& destData) override
+{
+auto state = parameters.copyState();
+std::unique_ptr<juce::XmlElement> xml (state.createXml());
+copyXmlToBinary (*xml, destData);
+}
+
+void AudioPluginAudioProcessor::setStateInformation (const void* data, int sizeInBytes) override
+{
+std::unique_ptr<juce::XmlElement> xmlState (AudioPluginAudioProcessor::getXmlFromBinary (data, sizeInBytes));
+
+if (xmlState.get() != nullptr)
+if (xmlState->hasTagName (parameters.state.getType()))
+parameters.replaceState (juce::ValueTree::fromXml (*xmlState));
+}
+
+ */
