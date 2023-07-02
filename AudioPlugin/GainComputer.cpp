@@ -8,7 +8,9 @@ GainComputer::GainComputer() {
     threshold = 0.0;
     ratio = 1.0;
     envDetector = new EnvelopeDetector();
+    debugSliders = false; // prints slider values for debugging
 }
+
 GainComputer::~GainComputer() {}
 
 void GainComputer::setThreshold(double newThreshold){
@@ -16,9 +18,11 @@ void GainComputer::setThreshold(double newThreshold){
         return;
     } else {
         threshold = newThreshold;
-        std::cout<<"Threshold: ";
-        std::cout<<threshold;
-        std::cout<<"\n";
+        if(debugSliders) {
+            std::cout << "Threshold: ";
+            std::cout << threshold;
+            std::cout << "\n";
+        }
     }
 }
 
@@ -27,9 +31,11 @@ void GainComputer::setRatio(double newRatio){
         return;
     } else {
         ratio = newRatio;
-        std::cout<<"Ratio: ";
-        std::cout<<ratio;
-        std::cout<<"\n";
+        if(debugSliders) {
+            std::cout << "Ratio: ";
+            std::cout << ratio;
+            std::cout << "\n";
+        }
     }
 }
 
@@ -39,9 +45,11 @@ void GainComputer::setAttackTime(double attackTime, double sampleRate) {
     } else {
         envDetector->setRCAttackTime(attackTime, sampleRate);
         lastAttackTime = attackTime;
-        std::cout<<"AttackTime: ";
-        std::cout << attackTime;
-        std::cout << "\n";
+        if(debugSliders) {
+            std::cout << "AttackTime: ";
+            std::cout << attackTime;
+            std::cout << "\n";
+        }
     }
 }
 
@@ -51,9 +59,11 @@ void GainComputer::setReleaseTime(double releaseTime, double sampleRate) {
     } else {
         envDetector->setRCReleaseTime(releaseTime, sampleRate);
         lastReleaseTime = releaseTime;
-        std::cout<<"ReleaseTime: ";
-        std::cout << releaseTime;
-        std::cout << "\n";
+        if(debugSliders) {
+            std::cout << "ReleaseTime: ";
+            std::cout << releaseTime;
+            std::cout << "\n";
+        }
     }
 }
 
@@ -61,18 +71,17 @@ void GainComputer::calcEnvelope(float inputValue) {
     detectorOutput = envDetector->getEnvelope(inputValue);
 }
 
+// If envelope detector output is above threshold, calculate output level from threshold and ratio
 double GainComputer::getOutputLevel(){
     if (detectorOutput<= threshold){
-        // std::cout << detectorOutput;
-        // std::cout << "\n";
         return detectorOutput;
     } else {
-        // std::cout << threshold + ((detectorOutput - threshold)/ratio);
-        // std::cout << "\n";
+        // Output level calculation for hard-knee downward compressor/upward expander
         return threshold + ((detectorOutput - threshold)/ratio);
     }
 }
 
+// Calculate the gain to be applied to the input signal in linear values
 double GainComputer::getGain(float inputValue){
     calcEnvelope(inputValue);
     gaindB = getOutputLevel() - detectorOutput;

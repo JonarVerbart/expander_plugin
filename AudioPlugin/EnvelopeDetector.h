@@ -7,7 +7,6 @@
 #include "math.h"
 #include "iostream"
 
-
 class EnvelopeDetector {
 public:
     EnvelopeDetector();
@@ -18,12 +17,10 @@ public:
     void setRCReleaseTime(double release_ms, double sampleRate);
 
 private:
-    //double currEnvelope;
     double rcAttackTime;
     double rcReleaseTime;
     double lastEnvelope;
     const double TLD_AUDIO_ENVELOPE_ANALOG_TC = -0.99967234081320612357829304641019;
 };
-
 
 #endif //EXPANDER_PLUGIN_ENVELOPEDETECTOR_H

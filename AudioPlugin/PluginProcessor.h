@@ -42,13 +42,13 @@ public:
     //==============================================================================
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
-    //double gainValue;
+
+    //==============================================================================
     GainComputer* expander;
     juce::AudioProcessorValueTreeState::ParameterLayout createParameters();
     juce::AudioProcessorValueTreeState apvts;
 
 private:
-    // juce::AudioParameterFloat* gain;
     float dBToLin(float valueIndB);
     float usrGainLin;
     float usrGaindB;

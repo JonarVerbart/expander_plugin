@@ -7,28 +7,27 @@
 
 #include "EnvelopeDetector.h"
 
-
 class GainComputer {
 public:
-GainComputer();
-~GainComputer();
-void setThreshold(double newThreshold);
-void setRatio(double newRatio);
-void setAttackTime(double attackTime, double sampleRate);
-void setReleaseTime(double releaseTime, double sampleRate);
-void calcEnvelope(float inputValue);
-double getOutputLevel();
-double getGain(float inputValue);
+    GainComputer();
+    ~GainComputer();
+    void setThreshold(double newThreshold);
+    void setRatio(double newRatio);
+    void setAttackTime(double attackTime, double sampleRate);
+    void setReleaseTime(double releaseTime, double sampleRate);
+    void calcEnvelope(float inputValue);
+    double getOutputLevel();
+    double getGain(float inputValue);
+    double gaindB;
+    bool debugSliders;
 private:
     double threshold;
     double ratio;
     double detectorOutput;
-    double gaindB;
     double linearGain;
     double lastAttackTime;
     double lastReleaseTime;
     EnvelopeDetector* envDetector;
 };
-
 
 #endif //EXPANDER_PLUGIN_GAINCOMPUTER_H
